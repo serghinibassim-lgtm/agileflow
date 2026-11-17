@@ -14,7 +14,7 @@ public record UserRequestDTO(
         @NotBlank @Email(message = "Format d'email invalide")
         String email,
 
-        @NotBlank @Size(min = 4, message = "Minimum 8 caractères")
+        @NotBlank @Size(min = 4, message = "Minimum 4 caractères")
         String password
 ) {
 

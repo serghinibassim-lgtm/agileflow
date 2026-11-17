@@ -12,26 +12,26 @@ import java.util.Set;
 
 @Entity
 @Data
-@Table(name="users")
+@Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String  User_id;
+    private String User_id;
     private String firstname;
-   private String lastname;
-   private String email;
-   private String password;
+    private String lastname;
+    private String email;
+    private String password;
 
 
-
-   @ManyToMany(fetch = FetchType.EAGER)
-           @JoinTable(name = "user_tables",
-           joinColumns = @JoinColumn(name = "user_id"),
-           inverseJoinColumns = @JoinColumn(name = "role_id"))
-  private Set<Role> roles =new HashSet<>();
+    @Builder.Default
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_tables",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
 
 }

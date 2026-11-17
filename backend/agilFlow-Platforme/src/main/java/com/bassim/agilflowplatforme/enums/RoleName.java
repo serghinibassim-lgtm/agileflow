@@ -1,9 +1,9 @@
 package com.bassim.agilflowplatforme.enums;
 
-public enum UserRole {
+public enum RoleName {
     ADMIN_SYS,
     ADMIN_ORGANISATION,
     PRODUCT_OWNER,
-    SCRUM_MSTER,
+    SCRUM_MASTER,
     DEVELOPPER
 }
