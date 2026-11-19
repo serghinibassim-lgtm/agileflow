@@ -4,6 +4,8 @@ package com.bassim.agilflowplatforme.web;
 import com.bassim.agilflowplatforme.dto.UserRequestDTO;
 import com.bassim.agilflowplatforme.dto.UserResponseDTO;
 import com.bassim.agilflowplatforme.entities.User;
+import com.bassim.agilflowplatforme.exception.ResourceAlreadyExistsException;
+import com.bassim.agilflowplatforme.exception.ResourceNotFoundException;
 import com.bassim.agilflowplatforme.mappers.UserMapper;
 import com.bassim.agilflowplatforme.repositories.RoleRepository;
 import com.bassim.agilflowplatforme.repositories.UserRepository;
@@ -26,6 +28,16 @@ public class UsersController {
 
 
     private final PasswordEncoder passwordEncoder;
+
+    @GetMapping("/404")
+    public void notfoundtest(){
+        throw new  ResourceNotFoundException(" cet page n'exit pas  set pour test ");
+    }
+
+    @GetMapping("/409")
+    public void alreadyexist(){
+        throw new ResourceAlreadyExistsException(" cet page n'exit pas  set pour tst des conflit  ");
+    }
 
     @GetMapping("/")
     public String home() {
