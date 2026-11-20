@@ -46,14 +46,29 @@ public class AuthController {
                 .maxAge(Duration.ofMillis(jwtExpiration))
                 .sameSite("Lax")
                 .build();
-
-
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
-
         return ResponseEntity.ok(Map.of(
                 "message", "Connexion réussie",
                 "token", token
         ));
+
+    }
+
+    @PostMapping("/logout")
+    public  ResponseEntity<Void> Logout (HttpServletResponse response){
+
+        ResponseCookie responseCookie=ResponseCookie.from("ACCESS_TOKEN","")
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .maxAge(0)
+                .sameSite("Lax")
+                .build();
+
+        response.addHeader(HttpHeaders.SET_COOKIE,responseCookie.toString());
+        return ResponseEntity.noContent().build();
+
+
 
     }
 }

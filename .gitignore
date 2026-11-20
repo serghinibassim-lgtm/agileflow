@@ -10,6 +10,8 @@ frontend/coverage/
 frontend/agilflowFrontend/.angular/
 frontend/agilflowFrontend/covergae/
 
+.env
+*.env
 
 
 frontend/agilflowFrontend/.vscode
@@ -36,7 +38,11 @@ frontend/.vscode/*
 
 backend/target/
 backend/agilFlow-Platforme/target/
+*.properties
 
+
+
+backend/agilFlow-Platforme/src/main/resources/application.properties
 # Environment variables
 backend/.env
 backend/.env.*
@@ -81,6 +87,9 @@ secrets/
 
 # Local overrides
 docker-compose.override.yml
+
+*.yml
+
 
 
 docs

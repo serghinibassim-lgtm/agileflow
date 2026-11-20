@@ -1,6 +1,8 @@
 package com.bassim.agilflowplatforme.config;
 
 
+import com.bassim.agilflowplatforme.security.CustomAccessDeniedHandler;
+import com.bassim.agilflowplatforme.security.CustomAuthenticationEntryPoint;
 import com.bassim.agilflowplatforme.services.CustomUserDetailsService;
 import jakarta.servlet.http.Cookie;
 import org.springframework.context.annotation.Bean;
@@ -28,13 +30,15 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailes;
     private final PasswordEncoder passwordEncoder;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
 
-
-    public SecurityConfig(CustomUserDetailsService customUserDetailsService, PasswordEncoder passwordEncoder) {
+    public SecurityConfig(CustomUserDetailsService customUserDetailsService, PasswordEncoder passwordEncoder, CustomAuthenticationEntryPoint customAuthenticationEntryPoint, CustomAccessDeniedHandler accessDeniedHandler) {
         this.userDetailes = customUserDetailsService;
         this.passwordEncoder = passwordEncoder;
+        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
+        this.accessDeniedHandler = accessDeniedHandler;
     }
-
 
 
     @Bean
@@ -46,17 +50,23 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/api/auth/**").permitAll()
                         .requestMatchers("/404", "/409").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                        .requestMatchers( "/users").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated()
+                ).exceptionHandling(exception ->
+                        exception
+                                .authenticationEntryPoint(customAuthenticationEntryPoint)
+                                .accessDeniedHandler(accessDeniedHandler)
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
                         .bearerTokenResolver(bearerTokenResolver())
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
                 );
         return http.build();
     }
-  @Bean
+
+    @Bean
     public BearerTokenResolver bearerTokenResolver() {
         DefaultBearerTokenResolver defaultResolver = new DefaultBearerTokenResolver();
         return request -> {
@@ -86,12 +96,10 @@ public class SecurityConfig {
     }
 
 
-
-
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailes);
-        provider.setPasswordEncoder( passwordEncoder);
+        provider.setPasswordEncoder(passwordEncoder);
         return provider;
     }
 
